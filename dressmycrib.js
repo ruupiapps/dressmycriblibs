@@ -12,7 +12,7 @@ let closeQRCodeModalButton = undefined;
 let qrCodeModal = undefined;
 let qrcodeContainer = undefined;
 let qrCodeModalMessage = undefined;
-let qrCodeMModalOKButton= undefined;
+let qrCodeMModalOKButton = undefined;
 
 let closeInfoModalButton = undefined;
 let infoModal = undefined;
@@ -26,7 +26,7 @@ let closeErrorModalButton = undefined;
 let errorModal = undefined;
 let errorContainer = undefined;
 let errorModalMessage = undefined;
-let errorModalOKButton= undefined;
+let errorModalOKButton = undefined;
 
 
 
@@ -49,7 +49,7 @@ let qrCodeText = QR_CODE_MODAL_TEXT;
 let pleaseWaitText = PLEASE_WAIT_TEXT;
 let notSuitableAndroidMsg = NOT_SUITABLE_ANDROID_MSG;
 let notSuitableAppleDeviceMsg = NOT_SUITABLE_IOS_MSG;
-let notSuitableDeviceGeneralMsg= NOT_SUITABLE_GENERAL_MSG;
+let notSuitableDeviceGeneralMsg = NOT_SUITABLE_GENERAL_MSG;
 
 
 let deviceType = getDeviceType();
@@ -381,7 +381,7 @@ async function fetchAndAppendHTML() {
         qrCodeMModalOKButton = document.getElementById('dmc-qrcode-ok-btn-id');
         closeQRCodeModalButton.addEventListener('click', closeQrCodeModal);
         qrCodeMModalOKButton.addEventListener('click', closeQrCodeModal);
-        
+
 
 
         closeInfoModalButton = document.getElementById('dmc-info-close-modal-button-id');
@@ -397,10 +397,10 @@ async function fetchAndAppendHTML() {
         errorModalMessage = document.getElementById('dmc-error-message-id');
         closeErrorModalButton.addEventListener('click', closeErrorModal);
         errorModalOKButton.addEventListener('click', closeErrorModal);
-        
-       
 
-        
+
+
+
 
 
         // overlay.addEventListener('click', closeModal);
@@ -417,14 +417,14 @@ window.addEventListener('DOMContentLoaded', fetchAndAppendHTML);
 
 
 async function openARPainting(imageFileUrl,
-    height, 
+    height,
     qrCodeText = QR_CODE_MODAL_TEXT,
     pleaseWaitText = PLEASE_WAIT_TEXT,
     notSuitableAndroidMsg = NOT_SUITABLE_ANDROID_MSG,
     notSuitableAppleDeviceMsg = NOT_SUITABLE_IOS_MSG,
-    notSuitableDeviceGeneralMsg= NOT_SUITABLE_GENERAL_MSG,
-   
-    ) {
+    notSuitableDeviceGeneralMsg = NOT_SUITABLE_GENERAL_MSG,
+
+) {
     uploadingIsInProgress = true;
 
     window.qrCodeText = qrCodeText;
@@ -433,7 +433,7 @@ async function openARPainting(imageFileUrl,
     window.notSuitableAppleDeviceMsg = notSuitableAppleDeviceMsg;
     window.notSuitableDeviceGeneralMsg = notSuitableDeviceGeneralMsg;
 
-     showMessageInfoModal( window.pleaseWaitText);
+    showMessageInfoModal(window.pleaseWaitText);
     // showErrorMessageModal(NOT_SUITABLE_ANDROID_MSG);
     const startConvertingAR = async () => {
         let imageFile = await fetch(imageFileUrl).then(r => r.blob());
@@ -876,7 +876,7 @@ function showQRCodeModal(url, qrCodeText = "") {
 }
 
 
-function closeErrorModal(){
+function closeErrorModal() {
     errorModal.style.display = 'none';
 }
 
@@ -920,7 +920,9 @@ function removeUrlParameter(param) {
 window.onload = function () {
     // Check for the condition (replace with your actual condition)
     if (new URLSearchParams(window.location.search).has('android-ar-error')) {
-
+        if (!window.notSuitableAndroidMsg) {
+            window.notSuitableAndroidMsg = NOT_SUITABLE_ANDROID_MSG;
+        }
         showErrorMessageModal(window.notSuitableAndroidMsg);
         removeUrlParameter('android-ar-error');
     }
