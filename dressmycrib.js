@@ -920,7 +920,8 @@ function removeUrlParameter(param) {
 window.onload = function () {
     // Check for the condition (replace with your actual condition)
     if (new URLSearchParams(window.location.search).has('android-ar-error')) {
-        showErrorMessageModal(window.notSuitableAndroidMsg, false);
+
+        showErrorMessageModal(window.notSuitableAndroidMsg);
         removeUrlParameter('android-ar-error');
     }
 };
