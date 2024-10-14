@@ -611,8 +611,8 @@ function loadAndroidAR(glb) {
     browser_fallback_url_android = window.location.href;
 
     browser_fallback_url_android = browser_fallback_url_android.includes('?')
-        ? `${browser_fallback_url_android}&android-ar-error=true`
-        : `${browser_fallback_url_android}?android-ar-error=true`;
+        ? `${browser_fallback_url_android}&android-ar-error=true&android-ar-error-text=${encodeURIComponent(window.notSuitableAndroidMsg)}`
+        : `${browser_fallback_url_android}?android-ar-error=true&android-ar-error-text=${encodeURIComponent(window.notSuitableAndroidMsg)}`
     let androidArUrl =
         "intent://arvr.google.com/scene-viewer/1.0?file=" + glb + "?mode=ar_only&enable_vertical_placement=true&resizable=false&disable_occlusion=true#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=" +
         browser_fallback_url_android +
@@ -918,12 +918,22 @@ function removeUrlParameter(param) {
 }
 
 window.onload = function () {
+
+    const urlSearchParam = new URLSearchParams(window.location.search);
     // Check for the condition (replace with your actual condition)
-    if (new URLSearchParams(window.location.search).has('android-ar-error')) {
-        if (!window.notSuitableAndroidMsg) {
-            window.notSuitableAndroidMsg = NOT_SUITABLE_ANDROID_MSG;
+    if (urlSearchParam.has('android-ar-error')) {
+        let errorMessage = NOT_SUITABLE_ANDROID_MSG;
+        if (urlSearchParam.has('android-ar-error-text')) {
+            errorMessage = urlSearchParam.get('android-ar-error-text');
+            removeUrlParameter('android-ar-error-text');
         }
-        showErrorMessageModal(window.notSuitableAndroidMsg);
+
+        if (!window.notSuitableAndroidMsg) {
+            window.notSuitableAndroidMsg = errorMessage;
+        }
+        showErrorMessageModal(errorMessage);
         removeUrlParameter('android-ar-error');
+
+
     }
 };
