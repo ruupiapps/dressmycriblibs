@@ -436,12 +436,14 @@ async function openARPainting(imageFileUrl,
     window.notSuitableAppleDeviceMsg = notSuitableAppleDeviceMsg;
     window.notSuitableDeviceGeneralMsg = notSuitableDeviceGeneralMsg;
 
+    // alert("DEVICE TYPE " + deviceType);
+
     showMessageInfoModal(window.pleaseWaitText);
     // showErrorMessageModal(NOT_SUITABLE_ANDROID_MSG);
     const startConvertingAR = async () => {
         let imageFile = null;
         try {
-         imageFile = await fetch(imageFileUrl).then(r => r.blob());
+            imageFile = await fetch(imageFileUrl).then(r => r.blob());
         } catch (error) {
             console.error("An error occurred while fetching the image:", error);
             closeInfoModal();
@@ -673,9 +675,13 @@ function loadIOSAR(usdz) {
 function getDeviceType() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
+    const isIpadOS = /iPad/.test(userAgent) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /Macintosh/.test(userAgent));
+
     if (/android/i.test(userAgent)) {
         return DEVICE_TYPE_ANDROID;
     } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return DEVICE_TYPE_IOS;
+    } else if (doesIOsSupportAR() || isIpadOS) {
         return DEVICE_TYPE_IOS;
     } else {
         return DEVICE_TYPE_DESKTOP;
@@ -774,7 +780,7 @@ function checkIfDeviceSupportsAR() {
             case DEVICE_TYPE_IOS:
                 const iosSupportsAr = doesIOsSupportAR();
 
-                alert("browserName " + browserName);
+                // alert("browserName " + browserName);
 
                 // if (browserName != "Safari" ){
 
