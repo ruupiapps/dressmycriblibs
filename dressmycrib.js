@@ -70,6 +70,7 @@ const qrCodeModalHtml = `
                 /* Semi-transparent background */
                 justify-content: center;
                 align-items: center;
+                z-index: 10000;
             }
         
             /* Modal content styles */
@@ -162,6 +163,7 @@ const infoModalHtml = `
                 /* Semi-transparent background */
                 justify-content: center;
                 align-items: center;
+                z-index: 10000;
             }
         
             /* Modal content styles */
@@ -289,6 +291,7 @@ const errorModalHtml = `
                 /* Semi-transparent background */
                 justify-content: center;
                 align-items: center;
+                 z-index: 10000;
             }
         
             /* Modal content styles */
@@ -436,7 +439,16 @@ async function openARPainting(imageFileUrl,
     showMessageInfoModal(window.pleaseWaitText);
     // showErrorMessageModal(NOT_SUITABLE_ANDROID_MSG);
     const startConvertingAR = async () => {
-        let imageFile = await fetch(imageFileUrl).then(r => r.blob());
+        let imageFile = null;
+        try {
+         imageFile = await fetch(imageFileUrl).then(r => r.blob());
+        } catch (error) {
+            console.error("An error occurred while fetching the image:", error);
+            closeInfoModal();
+            showErrorMessageModal("We're sorry, could not upload image for converting to AR.");
+            return false;
+
+        }
         if (!uploadingIsInProgress) {
             return false;
         }
@@ -569,7 +581,7 @@ async function openARPaintingImageFile(imageFile, height, qrCodeText) {
             if (!uploadingIsInProgress) {
                 return false;
             }
-            let itemUrl = `https://general.ruupi.com:8443/item/${data.itemId}?enable_vertical_placement=1`;
+            let itemUrl = `https://ar-api.dressmycrib.com/item/${data.itemId}?enable_vertical_placement=1`;
             if (!uploadingIsInProgress) {
                 return false;
             }
@@ -590,10 +602,17 @@ async function openARPaintingImageFile(imageFile, height, qrCodeText) {
         } else {
             // Handle error response
             console.error('Failed to upload data');
+            closeQrCodeModal();
+            closeInfoModal();
+            showErrorMessageModal("We're sorry, but it seems something didn’t go as planned. Our team is already working to fix this");
         }
     } catch (error) {
         // Handle network or other errors
         console.error('An error occurred:', error);
+        closeQrCodeModal();
+        closeInfoModal();
+        showErrorMessageModal("We're sorry, but it seems something didn’t go as planned. Our team is already working to fix this");
+
     }
 
 }
